@@ -13,13 +13,12 @@
         h3 {color: darkcyan;}
         th {color: black;}
         td {color: black;}
-        .jumbotron {background-color: lightcyan;}
+        .jumbotron {background-color: lightgreen;}
     </style>
 </head>
 <body>
     <div class="container">
         <div class="jumbotron">
-            <h1 class="text-center">Day Name</h1>
             <div th:replace="Base :: navlinks"></div><br /><br />
             <h3 class="text-center">Enter your birthdate information</h3>
             <form action="#" th:action="@{/getname}" th:object="${date}" method="post">
