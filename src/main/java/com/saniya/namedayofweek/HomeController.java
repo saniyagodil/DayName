@@ -74,6 +74,7 @@ public class HomeController {
         int a = Integer.parseInt(date.substring(0,2));
         int b = Integer.parseInt(date.substring(2,4));
         int c = Integer.parseInt(date.substring(4,8));
+        String zodiac = getZodiac(c);
         LocalDate userDate= LocalDate.of(c, b, a);
         if(userDate.isAfter(LocalDate.now())){
             return "Form";
@@ -82,11 +83,12 @@ public class HomeController {
         int x = getIndex(day); //get index of day of the week, Monday is 0, Sunday is 6
 
 
-        BirthInfo newInfo = new BirthInfo(userDate, day, getMaleName(x), getFemaleName(x), getChar(x));
+        BirthInfo newInfo = new BirthInfo(zodiac, userDate, day, getMaleName(x), getFemaleName(x), getChar(x));
         birthInfoRepository.save(newInfo);
         thisUser.addBirthInfo(newInfo); ///adding birth info to user
         userRepository.save(thisUser);
         model.addAttribute("day", day);
+        model.addAttribute("zodiac", zodiac);
         model.addAttribute("Malename", getMaleName(x));
         model.addAttribute("Femalename", getFemaleName(x));
         model.addAttribute("characteristics", getChar(x));
@@ -98,6 +100,7 @@ public class HomeController {
         User thisUser = userRepository.findByUsername(auth.getName());
         BirthInfo birthInfo = thisUser.getRecentBirthInfo();
         model.addAttribute("day", birthInfo.getDay());
+        model.addAttribute("zodiac", birthInfo.getZodiac());
         model.addAttribute("Malename", birthInfo.getMalename());
         model.addAttribute("Femalename", birthInfo.getFemalename());
         model.addAttribute("characteristics", birthInfo.getCharacteristics());
@@ -106,7 +109,11 @@ public class HomeController {
 
 
 
-
+    public String getZodiac(int c){
+        int i = c%12;
+        String[] zodiac = {"Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox", "Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat/Sheep"};
+        return zodiac[i];
+    }
 
 
     public int getIndex(String day){
