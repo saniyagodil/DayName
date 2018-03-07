@@ -27,6 +27,7 @@ public class BirthInfo {
 
     private String zodiac;
 
+    private String astro;
 
     @ManyToMany
     private Set<User> users;
@@ -34,7 +35,8 @@ public class BirthInfo {
     public BirthInfo() {
     }
 
-    public BirthInfo(String zodiac, LocalDate date, String day, String malename, String femalename, String characteristics) {
+    public BirthInfo(String astro, String zodiac, LocalDate date, String day, String malename, String femalename, String characteristics) {
+        this.astro = astro;
         this.zodiac = zodiac;
         this.date = date;
         this.day = day;
@@ -110,5 +112,13 @@ public class BirthInfo {
 
     public void setZodiac(String zodiac) {
         this.zodiac = zodiac;
+    }
+
+    public String getAstro() {
+        return astro;
+    }
+
+    public void setAstro(String astro) {
+        this.astro = astro;
     }
 }

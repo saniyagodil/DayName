@@ -25,10 +25,8 @@ public class HomeController {
 
     @Autowired
     RoleRepository roleRepository;
-
     @Autowired
     UserRepository userRepository;
-
     @Autowired
     BirthInfoRepository birthInfoRepository;
 
@@ -59,7 +57,6 @@ public class HomeController {
         return "Login";
     }
 
-
     @GetMapping("/getname")
     public String getDate(Model model){
         String date = new String();
@@ -82,12 +79,13 @@ public class HomeController {
         String day = userDate.getDayOfWeek().name();  ///Get the full word for day of the week
         int x = getIndex(day); //get index of day of the week, Monday is 0, Sunday is 6
 
-
-        BirthInfo newInfo = new BirthInfo(zodiac, userDate, day, getMaleName(x), getFemaleName(x), getChar(x));
+        String astro = getAstro(a, b);
+        BirthInfo newInfo = new BirthInfo(astro, zodiac, userDate, day, getMaleName(x), getFemaleName(x), getChar(x));
         birthInfoRepository.save(newInfo);
         thisUser.addBirthInfo(newInfo); ///adding birth info to user
         userRepository.save(thisUser);
         model.addAttribute("day", day);
+        model.addAttribute("astro", astro);
         model.addAttribute("zodiac", zodiac);
         model.addAttribute("Malename", getMaleName(x));
         model.addAttribute("Femalename", getFemaleName(x));
@@ -100,6 +98,7 @@ public class HomeController {
         User thisUser = userRepository.findByUsername(auth.getName());
         BirthInfo birthInfo = thisUser.getRecentBirthInfo();
         model.addAttribute("day", birthInfo.getDay());
+        model.addAttribute("astro", birthInfo.getAstro());
         model.addAttribute("zodiac", birthInfo.getZodiac());
         model.addAttribute("Malename", birthInfo.getMalename());
         model.addAttribute("Femalename", birthInfo.getFemalename());
@@ -108,6 +107,35 @@ public class HomeController {
     }
 
 
+    public String getAstro(int a, int b) {
+        String astro = "";
+        if ((b == 1 && a <= 19) || (b == 12 && a >= 22)) {
+            astro = "Capricorn";
+        } else if ((b == 2 && a <= 18) || (b == 1 && a >= 20)) {
+            astro = "Aquarius";
+        } else if ((b == 3 && a <= 20) || (b == 2 && a >= 19)) {
+            astro = "Pisces";
+        } else if ((b == 4 && a <= 19) || (b == 3 && a >= 21)) {
+            astro = "Aries";
+        } else if((b == 5 && a <= 20) || (b == 4 && a >= 20)){
+            astro = "Taurus";
+        }else if((b == 6 && a <= 20) || (b == 5 && a >= 21)) {
+            astro = "Gemini";
+        }else if((b == 7 && a <= 22) || (b == 6 && a >= 21)) {
+            astro = "Cancer";
+        }else if((b == 8 && a <= 22) || (b == 7 && a >= 23)) {
+            astro = "Leo";
+        }else if((b == 9 && a <= 22) || (b == 8 && a >= 23)) {
+            astro = "Virgo";
+        }else if((b == 10 && a <= 22) || (b == 9 && a >= 23)) {
+            astro = "Libra";
+        }else if((b == 11 && a <= 21) || (b == 10 && a >= 23)) {
+            astro = "Scorpio";
+        }else if((b == 12 && a <= 21) || (b == 11 && a >= 22)) {
+            astro = "Sagittarius";
+        }
+        return astro;
+    }
 
     public String getZodiac(int c){
         int i = c%12;
