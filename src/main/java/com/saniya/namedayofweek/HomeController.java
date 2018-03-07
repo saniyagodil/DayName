@@ -9,10 +9,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import java.text.SimpleDateFormat;
@@ -99,6 +97,13 @@ public class HomeController {
         BirthInfo birthInfo = thisUser.getRecentBirthInfo();
         model.addAttribute("day", birthInfo.getDay());
         model.addAttribute("astro", birthInfo.getAstro());
+
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "http://horoscope-api.herokuapp.com/horoscope/today/";
+        url = url + birthInfo.getAstro();
+        Horoscope horoscope= restTemplate.getForObject(url, Horoscope.class);
+        model.addAttribute("horoscope", horoscope.getHoroscope());
+
         model.addAttribute("zodiac", birthInfo.getZodiac());
         model.addAttribute("Malename", birthInfo.getMalename());
         model.addAttribute("Femalename", birthInfo.getFemalename());
